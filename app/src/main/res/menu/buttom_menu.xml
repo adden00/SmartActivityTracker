@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/stat_id"
+        android:icon="@drawable/img_stat_ico"
+        android:title="@string/statistic_name"
+        android:orderInCategory="1"/>
+
+    <item android:id="@+id/home_id"
+        android:icon="@drawable/img_monitoring_ico"
+        android:title="@string/monitoring_name"
+        android:orderInCategory="2"/>
+
+    <item android:id="@+id/set_id"
+        android:icon="@drawable/img_set_ico"
+        android:title="@string/settings_name"
+        android:orderInCategory="3"/>
+</menu>
