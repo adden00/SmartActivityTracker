@@ -3,7 +3,7 @@ package com.example.smartactivitytracker.bluetooth
 import android.bluetooth.BluetoothAdapter
 
 class BtConnection(private val adapter: BluetoothAdapter, private val receiver: ReceiveThread.Receiver,
-                   private var toast: Any) {
+                   private var toast1: Any, private var toast2: Any) {
 
     lateinit var cThread: ConnectThread
 
@@ -11,7 +11,7 @@ class BtConnection(private val adapter: BluetoothAdapter, private val receiver: 
         if (adapter.isEnabled && mac.isNotEmpty()) {
             val device = adapter.getRemoteDevice(mac)
             device.let {
-                cThread = ConnectThread(it, receiver, toast)
+                cThread = ConnectThread(it, receiver, toast1, toast2)
                 cThread.start()
             }
         }

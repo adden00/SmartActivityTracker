@@ -6,13 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.smartactivitytracker.activities.MainActivity
+import com.example.smartactivitytracker.activities.MainApp
 import com.example.smartactivitytracker.databinding.FragmentMainMonitorBinding
+import com.example.smartactivitytracker.db.MainViewModel
+import com.example.smartactivitytracker.entities.Datas
 
 
 class MainMonitorFragment : Fragment() {
     lateinit var binding: FragmentMainMonitorBinding
     var measuring = false
+
 
 
     override fun onCreateView(
@@ -22,6 +27,7 @@ class MainMonitorFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMainMonitorBinding.inflate(inflater)
         setButtons()
+
         return binding.root
     }
 
@@ -51,10 +57,6 @@ class MainMonitorFragment : Fragment() {
             }
 
 
-//            (activity as MainActivity).startMeasure()
-//
-//            binding.btnStartMeasure.text = "стоп"
-//            binding.btnStartMeasure.setBackgroundColor(Color.parseColor("#FF0000"))
         }
     }
 
@@ -62,9 +64,24 @@ class MainMonitorFragment : Fragment() {
         binding.btnStartMeasure.isEnabled = true
     }
 
-    fun updateValHeart(newVal: String) {
+    fun newDataItem(newData: Datas) { // при получении нового значения
 
-        binding.tvTemperature.text = newVal
+        when (newData.dataType) { // TODO проверку корректности данных
+            "t" -> {
+                binding.tvTemperature.text = newData.value
+            }
+
+            "h" -> {
+                binding.tvHeartRate.text = newData.value
+            }
+
+            "s" -> {
+                binding.tvSteps.text = newData.value
+            }
+        }
+
+
+//        binding.tvTemperature.text = newVal
     }
 
     companion object {

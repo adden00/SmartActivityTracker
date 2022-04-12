@@ -10,4 +10,7 @@
     <string name="current_temperature">Температура тела:</string>
     <string name="current_oxygen">Уровень кислорода в крови:</string>
     <string name="start">Старт</string>
+    <string name="stepsCount">количество шагов за сегодня:</string>
+    <string name="predict_string">Прогноз активности</string>
+    <string name="predict">Прогноз</string>
 </resources>

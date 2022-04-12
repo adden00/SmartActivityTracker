@@ -3,68 +3,77 @@ package com.example.smartactivitytracker.bluetooth
 import android.app.Activity
 import android.bluetooth.BluetoothSocket
 import android.util.Log
+import com.example.smartactivitytracker.entities.Datas
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
-class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: Receiver): Thread() {
-    var inStream: InputStream ?= null
-    var outStream: OutputStream ?= null
-    internal var activity: Activity ?= null
+class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: Receiver) :
+    Thread() {
+    var inStream: InputStream? = null
+    var outStream: OutputStream? = null
+    internal var activity: Activity? = null
     lateinit var temper: String
 
 
     init {
         try {
             inStream = bSocket.inputStream
-        } catch (i: IOException){
+        } catch (i: IOException) {
 
         }
 
         try {
             outStream = bSocket.outputStream
-        } catch (i: IOException){
+        } catch (i: IOException) {
 
         }
     }
 
     override fun run() {
-        val buf = ByteArray(7)
-        while (true){
+        val buf = ByteArray(255)
+        while (true) {
             try {
                 val size = inStream?.read(buf)
                 var message = String(buf, 0, size!!)
                 message = trim(message)
+                var droppedMsg = message.drop(1)
+                val pos = droppedMsg.indexOfAny(charArrayOf('s', 't', 'h'))
+
+                if (pos >= 0 ) droppedMsg = droppedMsg.substring(0, pos)
+
                 if (message.isNotEmpty()) {
+                    message = message.trim()
+                    Log.d("MyLog", "Message: $message")
 
+                    receiver.receiveData(
+                        Datas(
+                            null, message[0].toString(),
+                            droppedMsg.trim(), getCurrentTime()
+                        )
+                    )
 
-                    when {
-                        message[0] == '.' -> {
-                            temper += message
-                            Log.d("MyLog", "message: $temper")
-                            receiver.receiveData(temper) // вызываем метод интерфейса, описанный в main_activity
-                            temper = ""
-                        }
-                        message.length > 4 -> {
-                            temper = message
-                            Log.d("MyLog", "message: $temper")
-                            receiver.receiveData(temper) // вызываем метод интерфейса, описанный в main_activity
-                            temper = ""
-                        }
-                        else -> {
-                            temper = message
-                        }
-                    }
                 }
 
-            }catch (i: IOException) {Log.d("MyLog", "message: caught!"); break}
+            } catch (i: IOException) {
+                Log.d("MyLog", "message: caught!"); break
+            }
         }
 
     }
-    fun sendMessage(byteArray: ByteArray){
+
+    private fun getCurrentTime(): String {
+        val formatter = SimpleDateFormat("hh:mm:ss - yyyy/MM/dd", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun sendMessage(byteArray: ByteArray) {
         try {
             outStream?.write(byteArray)
-        }catch (i: IOException){}
+        } catch (i: IOException) {
+        }
     }
 
     private fun trim(input: String): String {  // Убираем лишние символы из входных данных
@@ -77,7 +86,7 @@ class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: 
 
 
     interface Receiver {
-        fun receiveData(data: String)
+        fun receiveData(data: Datas)
 
     }
 }
