@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
         supportActionBar?.title = getString(R.string.app_name_short)
 
         binding.bottomMenu.selectedItemId = R.id.home_id
-        supportFragmentManager.beginTransaction().replace(
+        supportFragmentManager.beginTransaction().replace(     // запуск фрагмента мониторинга
             R.id.place_holder,
             MainMonitorFragment.newInstance()
         ).commit()
@@ -72,13 +72,13 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
                 }
 
                 R.id.home_id -> {
-                    page = if (page == 1) {
-                        FragmentManager.setFragment(PredictFragment.newInstance(), this)
-                        2
-                    } else {
+//                    page = if (page == 1) {
+//                        FragmentManager.setFragment(PredictFragment.newInstance(), this)
+//                        2
+//                    } else {
                         FragmentManager.setFragment(MainMonitorFragment.newInstance(), this)
-                        1
-                    }
+//                        1
+//                    }
                 }
                 R.id.set_id -> {}
                 R.id.predict_id -> {
@@ -99,11 +99,11 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
         val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val btAdapter = btManager.adapter
         toastConnected =
-            Toast.makeText(this, "connected!", Toast.LENGTH_SHORT) // сообщение connected!
+            Toast.makeText(this, "Подключено!", Toast.LENGTH_SHORT) // сообщение connected!
         toastFailedConnected =
             Toast.makeText(
                 this,
-                "fail while connection!",
+                "Ошибка при подключении!",
                 Toast.LENGTH_SHORT
             ) // сообщение connected!
 
@@ -148,6 +148,9 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
     override fun receiveData(data: Datas) {
         mainViewModel.insertData(data)
         runOnUiThread {
+            if (data.dataType == "b") {
+                binding.tvBatteryPercentage.text = data.value + "%"
+            }
             (supportFragmentManager.findFragmentById(R.id.place_holder) as? MainMonitorFragment)?.newDataItem(
                 data
             )

@@ -10,39 +10,27 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: Receiver) :
+class ReceiveThread(bSocket: BluetoothSocket, private val receiver: Receiver) :
     Thread() {
     var inStream: InputStream? = null
-    var outStream: OutputStream? = null
-    internal var activity: Activity? = null
-    lateinit var temper: String
-
 
     init {
         try {
             inStream = bSocket.inputStream
-        } catch (i: IOException) {
-
-        }
-
-        try {
-            outStream = bSocket.outputStream
-        } catch (i: IOException) {
-
-        }
+        } catch (i: IOException) {}
     }
 
     override fun run() {
         val buf = ByteArray(255)
         while (true) {
-            try {
+            try {                                            // бесконечный цикл, в котором происходит чтение данных и отправка в активити
                 val size = inStream?.read(buf)
                 var message = String(buf, 0, size!!)
                 message = trim(message)
                 var droppedMsg = message.drop(1)
-                val pos = droppedMsg.indexOfAny(charArrayOf('s', 't', 'h'))
+                val pos = droppedMsg.indexOfAny(charArrayOf('s', 't', 'h', 'b'))
 
-                if (pos >= 0 ) droppedMsg = droppedMsg.substring(0, pos)
+                if (pos >= 0) droppedMsg = droppedMsg.substring(0, pos)
 
                 if (message.isNotEmpty()) {
                     message = message.trim()
@@ -51,32 +39,18 @@ class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: 
                     receiver.receiveData(
                         Datas(
                             null, message[0].toString(),
-                            droppedMsg.trim(), getCurrentTime()
-                        )
-                    )
-
+                            droppedMsg.trim(), getCurrentTime()))
                 }
-
-            } catch (i: IOException) {
-                Log.d("MyLog", "message: caught!"); break
-            }
+            } catch (i: IOException) {break}
         }
-
     }
 
-    private fun getCurrentTime(): String {
+    private fun getCurrentTime(): String {              // получение текущего времени для каждого входящего значения
         val formatter = SimpleDateFormat("hh:mm:ss - yyyy/MM/dd", Locale.getDefault())
         return formatter.format(Calendar.getInstance().time)
     }
 
-    fun sendMessage(byteArray: ByteArray) {
-        try {
-            outStream?.write(byteArray)
-        } catch (i: IOException) {
-        }
-    }
-
-    private fun trim(input: String): String {  // Убираем лишние символы из входных данных
+    private fun trim(input: String): String {  // функция уберает лишние символы из входных данных
         var temp: String = input
         temp = temp.replace("\n", "")
         temp = temp.replace(" ", "")
@@ -84,9 +58,7 @@ class ReceiveThread(private val bSocket: BluetoothSocket, private val receiver: 
         return temp
     }
 
-
-    interface Receiver {
+    interface Receiver {               // интерфейс для отправки данных
         fun receiveData(data: Datas)
-
     }
 }

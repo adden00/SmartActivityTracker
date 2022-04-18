@@ -50,7 +50,7 @@ class StatisticFragment : Fragment() {
 
     private fun initAll() {
         initLineChart()
-        setDataToLineChart()
+
 
         binding.btnUpdateTemper.setOnClickListener {
             setTemperatureToLineChart()
@@ -58,6 +58,10 @@ class StatisticFragment : Fragment() {
 
         binding.btnUpdateHeart.setOnClickListener {
             setHeartToLineChart()
+        }
+
+        binding.btnUpdateStreps.setOnClickListener{
+            setStepsToLineChart()
         }
     }
 
@@ -77,33 +81,29 @@ class StatisticFragment : Fragment() {
     // функции для графика
 
     private fun initLineChart() {
-
-//        hide grid lines
+        // скрыть сетку
         lineChart.axisLeft.setDrawGridLines(false)
         val xAxis: XAxis = lineChart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
 
-        //remove right y-axis
+        // убрать правую ось
         lineChart.axisRight.isEnabled = false
 
-        //remove legend
+        // убрать легенду
         lineChart.legend.isEnabled = false
 
-
-        //remove description label
+        // убрать описание графика
         lineChart.description.isEnabled = false
 
-
-        //add animation
+        //анимация при показе
         lineChart.animateX(1000, Easing.EaseInSine)
 
-        // to draw label on xAxis
+        // подписи осей
         xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
         xAxis.valueFormatter = MyAxisFormatter()
         xAxis.setDrawLabels(true)
         xAxis.granularity = 1f
-//        xAxis.labelRotationAngle = +90f
 
     }
 
@@ -120,31 +120,26 @@ class StatisticFragment : Fragment() {
         }
     }
 
-    private fun setTemperatureToLineChart() {
-        //now draw bar chart with dynamic data
+    private fun setTemperatureToLineChart() {               // функция вывода на график данных о температуре
         val entries: ArrayList<Entry> = ArrayList()
 
-        mainViewModel.dayData.observe(viewLifecycleOwner) { // достать список из liveData
+        mainViewModel.dayData.observe(viewLifecycleOwner) {  // получения списка из liveData базы данных
             scoreList = ArrayList(it)
         }
 
-        //you can replace this data object with  your custom object
-        for (i in scoreList.indices) {
+        for (i in scoreList.indices) {                       // создание списка с координатами точек
             val score = scoreList[i]
-            if (score.dataType == "t") // TODO проверку корректности данных
+            if (score.dataType == "t")
                 entries.add(Entry(i.toFloat(), score.value.toFloat()))
         }
-
-        val lineDataSet = LineDataSet(entries, "")
-
-        val data = LineData(lineDataSet)
+        val data = LineData(LineDataSet(entries, ""))  // преобразование в тип LineData для отображение на графике
         lineChart.data = data
-
         lineChart.invalidate()
     }
+
+
 
     private fun setHeartToLineChart() {
-        //now draw bar chart with dynamic data
         val entries: ArrayList<Entry> = ArrayList()
 
         mainViewModel.dayData.observe(viewLifecycleOwner) { // достать список из liveData
@@ -154,7 +149,7 @@ class StatisticFragment : Fragment() {
         //you can replace this data object with  your custom object
         for (i in scoreList.indices) {
             val score = scoreList[i]
-            if (score.dataType == "h") // TODO проверку корректности данных
+            if (score.dataType == "h") // TODO можно добавить проверку корректности данных
                 entries.add(Entry(i.toFloat(), score.value.toFloat()))
         }
 
@@ -166,8 +161,7 @@ class StatisticFragment : Fragment() {
         lineChart.invalidate()
     }
 
-    private fun setDataToLineChart() {
-        //now draw bar chart with dynamic data
+    private fun setStepsToLineChart() {
         val entries: ArrayList<Entry> = ArrayList()
 
         mainViewModel.dayData.observe(viewLifecycleOwner) { // достать список из liveData
@@ -177,7 +171,8 @@ class StatisticFragment : Fragment() {
         //you can replace this data object with  your custom object
         for (i in scoreList.indices) {
             val score = scoreList[i]
-            entries.add(Entry(i.toFloat(), score.value.toFloat()))
+            if (score.dataType == "s")
+                entries.add(Entry(i.toFloat(), score.value.toFloat()))
         }
 
         val lineDataSet = LineDataSet(entries, "")
@@ -188,7 +183,27 @@ class StatisticFragment : Fragment() {
         lineChart.invalidate()
     }
 
-    // simulate api call
-    // we are initialising it directly
+//    private fun setDataToLineChart() {
+//        //now draw bar chart with dynamic data
+//        val entries: ArrayList<Entry> = ArrayList()
+//
+//        mainViewModel.dayData.observe(viewLifecycleOwner) { // достать список из liveData
+//            scoreList = ArrayList(it)
+//        }
+//
+//        //you can replace this data object with  your custom object
+//        for (i in scoreList.indices) {
+//            val score = scoreList[i]
+//            entries.add(Entry(i.toFloat(), score.value.toFloat()))
+//        }
+//
+//        val lineDataSet = LineDataSet(entries, "")
+//
+//        val data = LineData(lineDataSet)
+//        lineChart.data = data
+//
+//        lineChart.invalidate()
+//    } // вывод всез данных без категорий
+
 
 }

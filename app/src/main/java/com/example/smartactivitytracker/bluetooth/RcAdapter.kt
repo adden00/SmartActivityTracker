@@ -18,14 +18,14 @@ class RcAdapter(private val listener: Listener): ListAdapter<ListItem, RcAdapter
     class ItemHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ListtItemBinding.bind(view)
 
-        fun setData(item: ListItem, listener: Listener) = with(binding) {
+        fun setData(item: ListItem, listener: Listener) = with(binding) {  // наполнение элементов списка данными
             tvName.text = item.name
             tvMac.text = item.mac
             itemView.setOnClickListener{
                 listener.onClick(item)
             }
         }
-        companion object{
+        companion object{                                                 // создание нового элемента по шаблону
             fun create(parrent: ViewGroup): ItemHolder {
                 return ItemHolder(LayoutInflater.from(parrent.context).inflate(
                     R.layout.listt_item,
@@ -33,7 +33,7 @@ class RcAdapter(private val listener: Listener): ListAdapter<ListItem, RcAdapter
             }
         }
     }
-    class ItemComparator: DiffUtil.ItemCallback<ListItem>() {
+    class ItemComparator: DiffUtil.ItemCallback<ListItem>() {             // отслеживание изменений данных
         override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
             return oldItem.mac == newItem.mac
         }
@@ -52,7 +52,7 @@ class RcAdapter(private val listener: Listener): ListAdapter<ListItem, RcAdapter
         holder.setData(getItem(position), listener)
     }
 
-    interface Listener{
+    interface Listener{                                                   // слушатель нажатий на элемент
         fun onClick(item: ListItem)
     }
 

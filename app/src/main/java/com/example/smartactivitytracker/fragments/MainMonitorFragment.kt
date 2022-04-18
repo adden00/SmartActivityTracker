@@ -54,6 +54,9 @@ class MainMonitorFragment : Fragment() {
                 binding.btnStartMeasure.text = "старт"
                 binding.btnStartMeasure.setBackgroundColor(Color.parseColor("#3498DB"))
                 measuring = false
+                binding.tvHeartRate.text = "-"
+                binding.tvSteps.text = "-"
+                binding.tvTemperature.text = "-"
             }
 
 

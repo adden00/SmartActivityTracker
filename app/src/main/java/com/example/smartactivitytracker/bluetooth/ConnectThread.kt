@@ -17,7 +17,6 @@ class ConnectThread(private val device: BluetoothDevice, private val receiver: R
     private val toast1 = toast1 as Toast
     private val toast2 = toast2 as Toast
 
-
     init {
         try {
             mSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuid))
@@ -26,43 +25,31 @@ class ConnectThread(private val device: BluetoothDevice, private val receiver: R
         }
     }
 
-    override fun run() {
+    override fun run() {  // инициализация потока, подключение к устройству
         try {
-            Log.d("MyLog", "connecting")
-
             mSocket?.connect()
-            Log.d("MyLog", "Connected")
             this.toast1.show()
 
         } catch (i: IOException){
-            Log.d("MyLog", "Can not connect to device!")
             this.toast2.show()
-
             closeConnection()
         }
-
+    }
+    private fun closeConnection(){ // закрытие потока
+        try {
+            mSocket?.close()
+        } catch (i: IOException){ }
     }
 
-    fun startMeasure() {
+    fun startMeasure() {    // старт потока измерения
         try {
-
             rThread = ReceiveThread(mSocket!!, receiver)
             rThread.start()
         }
         catch (i: IOException) {closeConnection()}
     }
 
-
-    private fun closeConnection(){
-        try {
-            mSocket?.close()
-        } catch (i: IOException){
-
-        }
-    }
-
-    fun stopMeasure() {
+    fun stopMeasure() {  // Остановка потока измерения
         closeConnection()
     }
-
 }

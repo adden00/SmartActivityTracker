@@ -43,8 +43,14 @@ class PredictFragment : Fragment() {
         lineChart = binding.lineChartPredict
         initLineChart()
 
-        binding.button.setOnClickListener {
-            updateGraph()
+        binding.btnPredHeart.setOnClickListener {
+            updatePulse()
+        }
+        binding.btnPredSteps.setOnClickListener {
+            updateSteps()
+        }
+        binding.btnPredTemp.setOnClickListener {
+            updateTemp()
         }
 
 
@@ -100,29 +106,40 @@ class PredictFragment : Fragment() {
     }
 
 
-    private fun updateGraph() {
+    private fun updatePulse() {
         val entries1: ArrayList<Entry> = ArrayList()
-
-        entries1.add(Entry(1f, 26.7f))
-        entries1.add(Entry(2f, 23.7f))
-        entries1.add(Entry(3f, 24.7f))
-        entries1.add(Entry(4f, 24.45f))
-
 
         val entries2: ArrayList<Entry> = ArrayList()
 
-        entries2.add(Entry(1f, 364f))
-        entries2.add(Entry(2f, 574f))
-        entries2.add(Entry(3f, 324f))
-        entries2.add(Entry(4f, 64f))
+        entries1.add(Entry(1f, 88f))
+        entries1.add(Entry(2f, 92f))
+        entries1.add(Entry(3f, 90f))
+        entries1.add(Entry(4f, 94f))
+        entries1.add(Entry(5f, 96f))
+        entries1.add(Entry(6f, 90f))
+        entries1.add(Entry(7f, 93f))
+        entries1.add(Entry(8f, 98f))
+
+        entries2.add(Entry(1f, 89f))
+        entries2.add(Entry(2f, 90f))
+        entries2.add(Entry(3f, 91f))
+        entries2.add(Entry(4f, 92f))
+        entries2.add(Entry(5f, 93f))
+        entries2.add(Entry(6f, 94f))
+        entries2.add(Entry(7f, 95f))
+        entries2.add(Entry(8f, 96f))
+        entries2.add(Entry(9f, 97f))
+        entries2.add(Entry(10f, 98f))
+        entries2.add(Entry(11f, 99f))
+        entries2.add(Entry(12f, 100f))
+        entries2.add(Entry(13f, 101f))
+        entries2.add(Entry(14f, 102f))
+        entries2.add(Entry(15f, 103f))
+        entries2.add(Entry(16f, 104f))
 
 
-
-        //you can replace this data object with  your custom object
-
-
-        val lineDataSet1 = LineDataSet(entries1, "температура")
-        val lineDataSet2 = LineDataSet(entries2, "пульс")
+        val lineDataSet1 = LineDataSet(entries1, "статистика")
+        val lineDataSet2 = LineDataSet(entries2, "прогноз")
 
         lineDataSet2.color = Color.RED
 
@@ -135,6 +152,80 @@ class PredictFragment : Fragment() {
 
         lineChart.invalidate()
     }
+
+
+
+    private fun updateTemp() {
+        val entries1: ArrayList<Entry> = ArrayList()
+
+        val entries2: ArrayList<Entry> = ArrayList()
+
+        entries1.add(Entry(1f, 88f))
+        entries1.add(Entry(2f, 92f))
+        entries1.add(Entry(3f, 90f))
+        entries1.add(Entry(4f, 94f))
+
+        entries2.add(Entry(1f, 89f))
+        entries2.add(Entry(2f, 90f))
+        entries2.add(Entry(3f, 91f))
+        entries2.add(Entry(4f, 92f))
+        entries2.add(Entry(5f, 94f))
+        entries2.add(Entry(6f, 95f))
+        entries2.add(Entry(7f, 96f))
+        entries2.add(Entry(8f, 97f))
+
+
+
+        val lineDataSet1 = LineDataSet(entries1, "статистика")
+        val lineDataSet2 = LineDataSet(entries2, "прогноз")
+
+        lineDataSet2.color = Color.RED
+
+        val dataList: ArrayList<LineDataSet> = ArrayList()
+        dataList.add(lineDataSet1)
+        dataList.add(lineDataSet2)
+
+        val data = LineData(dataList as List<ILineDataSet>?)
+        lineChart.data = data
+
+        lineChart.invalidate()
+    }
+
+    private fun updateSteps() {
+        val entries1: ArrayList<Entry> = ArrayList()
+
+        val entries2: ArrayList<Entry> = ArrayList()
+
+        entries1.add(Entry(1f, 88f))
+        entries1.add(Entry(2f, 92f))
+        entries1.add(Entry(3f, 90f))
+        entries1.add(Entry(4f, 94f))
+
+        entries2.add(Entry(1f, 89f))
+        entries2.add(Entry(2f, 90f))
+        entries2.add(Entry(3f, 91f))
+        entries2.add(Entry(4f, 92f))
+        entries2.add(Entry(5f, 94f))
+        entries2.add(Entry(6f, 95f))
+        entries2.add(Entry(7f, 96f))
+        entries2.add(Entry(8f, 97f))
+
+
+        val lineDataSet1 = LineDataSet(entries1, "статистика")
+        val lineDataSet2 = LineDataSet(entries2, "прогноз")
+
+        lineDataSet2.color = Color.RED
+
+        val dataList: ArrayList<LineDataSet> = ArrayList()
+        dataList.add(lineDataSet1)
+        dataList.add(lineDataSet2)
+
+        val data = LineData(dataList as List<ILineDataSet>?)
+        lineChart.data = data
+
+        lineChart.invalidate()
+    }
+
 
     companion object {
 
