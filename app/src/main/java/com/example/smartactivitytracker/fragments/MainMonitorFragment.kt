@@ -42,12 +42,13 @@ class MainMonitorFragment : Fragment() {
 
     private fun setButtons() {
         binding.btnStartMeasure.setOnClickListener {
+
             if (!measuring) {
-                (activity as MainActivity).startMeasure()
+                if ((activity as MainActivity).startMeasure()) {
 
                 binding.btnStartMeasure.text = "стоп"
                 binding.btnStartMeasure.setBackgroundColor(Color.parseColor("#FF0000"))
-                measuring = true
+                measuring = true}
             }
             else {
                 (activity as MainActivity).stopMeasure()

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
 
     private lateinit var toastConnected: Toast
     private lateinit var toastFailedConnected: Toast
-    var page = 1
+    var connectedFlag = false
 
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModel.MainViewModelFactory((applicationContext as MainApp).database)
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
         setContentView(binding.root)
 
         if (getDate() != getCurrentTime()) {
-//            newDay()
+//          newDay()
             saveDate(getCurrentTime())
         }
         Log.d("MyLog", "cur date: ${getDate()}")
@@ -124,11 +125,12 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
 
             R.id.id_list -> mainLauncher.launch(Intent(this, BtListActivity::class.java))
 
-            R.id.id_connect -> // TODO сделать проверку на null
+            R.id.id_connect ->
                 if (listItem != null)
-                    listItem.let { btConnection.connect(it?.mac!!) }
+                    listItem.let { btConnection.connect(it?.mac!!)
+                    connectedFlag = true}
                 else
-                    Toast.makeText(this, "select the device firstly!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Пожалуйста, выберите устройство!", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -159,9 +161,13 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
     }
 
 
-    fun startMeasure() {
-        btConnection.startMeasure()
+    fun startMeasure(): Boolean {
+        if (connectedFlag)
+        {btConnection.startMeasure()
         (supportFragmentManager.findFragmentById(R.id.place_holder) as? MainMonitorFragment)?.unlockStartBtn()
+        return true}
+        Toast.makeText(this, "Пожалуйста, выберите устройство!", Toast.LENGTH_SHORT).show()
+        return false
     }
 
     fun stopMeasure() {
@@ -177,7 +183,7 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
         val pref: SharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE)
         val prefEditor: SharedPreferences.Editor = pref.edit()
         prefEditor.putString("CUR_DATE", date)
-        prefEditor.commit()
+        prefEditor.apply()
     }
 
     private fun getDate(): String {
@@ -186,7 +192,8 @@ class MainActivity : AppCompatActivity(), ReceiveThread.Receiver {
     }
 
 
-    private fun newDay() {
-        TODO("Not yet implemented")
-    }
+//    private fun newDay() {
+//        val steps = mainViewModel.countSteps()
+//        val
+//    }
 }

@@ -22,6 +22,18 @@ class MainViewModel(dataBase: MainDataBase) : ViewModel() {
         dao.insertDataItem(dataItem)
     }
 
+//    fun deleteData() = viewModelScope.launch {
+//        dao.deleteItem()
+//    }
+//
+//    fun countSteps() = viewModelScope.launch {
+//        dao.countSteps()
+//    }
+
+//    fun getAvgBpm() = viewModelScope.launch {
+//        dao.getAvgBpm()
+//    }
+
     class MainViewModelFactory(private val database: MainDataBase): ViewModelProvider.Factory { // создание экземпляра модели-представления
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {

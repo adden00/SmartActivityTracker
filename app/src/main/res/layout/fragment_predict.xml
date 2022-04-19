@@ -62,5 +62,14 @@
             app:layout_constraintEnd_toStartOf="@+id/btnPredSteps"
             app:layout_constraintStart_toEndOf="@+id/btnPredHeart" />
 
+        <TextView
+            android:id="@+id/tv_pred_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

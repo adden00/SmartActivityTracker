@@ -53,14 +53,17 @@ class StatisticFragment : Fragment() {
 
 
         binding.btnUpdateTemper.setOnClickListener {
+            binding.tvStatType.text = "Температура"
             setTemperatureToLineChart()
         }
 
         binding.btnUpdateHeart.setOnClickListener {
+            binding.tvStatType.text = "Пульс"
             setHeartToLineChart()
         }
 
         binding.btnUpdateStreps.setOnClickListener{
+            binding.tvStatType.text = "Шаги"
             setStepsToLineChart()
         }
     }
